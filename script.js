@@ -1,42 +1,58 @@
 // Function runs on page load to view current popular movies in the US
 // endpoint here: https://developer.themoviedb.org/reference/movie-popular-list
+
 function getPopularMovies(){
     // the endpoint
-    // TO DO
+    let url = "https://api.themoviedb.org/3/movie/popular?api_key=26cbadba3715ae229cdf350c34d7e326&language=en-US&page=1" // **modified by adding the api_key
     // the place on the page where we'll display the movies
     let popularMovies = document.getElementById("popular");
     let imgUrl = "https://image.tmdb.org/t/p/w400";
 
-
     // ajax time!
     // create the object
-    // TO DO
+    // const data = null;  **commented out
 
-    // attach event handlers
-    // TO DO
-    /*
-        // This code can be used for the display of the featured movie
-        // (it is a string template)
-            `<section id="featured">
-                <h3>${"TO DO"}</h3>
-                <img src="${"TO DO"}" alt="">
-                <p>"${"TO DO"}"</p>
-            </section>`
+    const xhr = new XMLHttpRequest();
+    // xhr.withCredentials = true;  **commented out
 
+    xhr.addEventListener('readystatechange', function () {
+        if (this.readyState === this.DONE) {
+            console.log(this.response); //** removed Text from responseText
 
-        // This code can be used for the display of the other popular movies (18 of them)
-        // (it is a string template)
-            `<section class="movie">
-                <img src="${"TO DO"}" alt="">
-                <div>
-                    <h3>${"TO DO"}</h3>
-                    <p>${"TO DO"}
-                        <span class="vote">Vote Average: ${"TO DO"}</span>
-                    </p>
-                </div>
-            </section>`
-        
-    */
+            let json = JSON.parse(this.responseText);
+            
+            let html = "";
+
+            //display featured movie
+            html += `<section id="featured">
+                        <h3>${json.results[0].title}</h3>
+                        <img src="${imgUrl}${json.results[0].poster_path}" alt="">
+                        <p>"${json.results[0].overview}"</p>
+                    </section>`;
+            
+            for(let i = 1; i < 19; i++) {
+                html += `<section class="movie">
+                            <img src="${imgUrl}${json.results[i].poster_path}" alt="">
+                            <div>
+                                <h3>${json.results[i].title}</h3>
+                                <p>${json.results[i].overview}
+                                    <span class="vote">Vote Average: ${json.results[i].vote_average}</span>
+                                </p>
+                            </div>
+                        </section>`
+            };
+
+            //add to page
+            popularMovies.innerHTML = html;
+        }
+    });
+
+    xhr.open('GET', url);
+    // xhr.setRequestHeader('accept', 'application/json');  **commented out
+    // xhr.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNmNiYWRiYTM3MTVhZTIyOWNkZjM1MGMzNGQ3ZTMyNiIsIm5iZiI6MTczOTQ4NDQ5MS41NzQwMDAxLCJzdWIiOiI2N2FlNmQ0YmVmMTQ0MTRjN2IzNmViNWIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.fE_gYZCwFXqCKLZOmHIwNKUFxsbQiagEPGtccpLovaM');  **commented out
+
+    // xhr.responseType = "json"; //**added => actually, this depends on the api so you have to try to figure it out!!
+    xhr.send();
     // set the response type
     // TO DO
     // open the request
