@@ -47,19 +47,15 @@ function getPopularMovies(){
         }
     });
 
+    // open the request
     xhr.open('GET', url);
     // xhr.setRequestHeader('accept', 'application/json');  **commented out
     // xhr.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNmNiYWRiYTM3MTVhZTIyOWNkZjM1MGMzNGQ3ZTMyNiIsIm5iZiI6MTczOTQ4NDQ5MS41NzQwMDAxLCJzdWIiOiI2N2FlNmQ0YmVmMTQ0MTRjN2IzNmViNWIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.fE_gYZCwFXqCKLZOmHIwNKUFxsbQiagEPGtccpLovaM');  **commented out
 
     // xhr.responseType = "json"; //**added => actually, this depends on the api so you have to try to figure it out!!
-    xhr.send();
-    // set the response type
-    // TO DO
-    // open the request
-    // TO DO
 
     // send the request
-    // TO DO
+    xhr.send();
 }
 
 // function runs only after a year is entered/chosen and submitted through the form
@@ -68,7 +64,7 @@ function getBirthYearMovies(e){
     e.preventDefault();
 
     // Get the user's input/year value
-    // TO DO
+    let year = encodeURI(document.getElementById("userYear").value);
     // the place on the page where we'll add the movies
     let birthYearMovies = document.getElementById("birthYear");
 
@@ -76,7 +72,9 @@ function getBirthYearMovies(e){
         birthYearMovies.innerHTML = `<p style="color: red; background-color: white;">Please enter a year between 1940 and 2022</p>`;
     }else{
         // TO DO - Build the endpoint we need (this one has additional parameters)
-        // TO DO
+        let beginURL = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&primary_release_year="
+        let endURL = "&sort_by=revenue.desc"
+        let url = `${beginURL}${year}${endURL}`
         let imgUrl = "https://image.tmdb.org/t/p/w400";
 
         // ajax time!
@@ -88,10 +86,10 @@ function getBirthYearMovies(e){
 
         /*
             // This code can be used for the display of the movies from the given year
-            // It skips any movies that don't include a poster
             // currently only displays the top six movies from that year but can be adjusted
             let counter = 0;
             for(let i = 0; counter < 6; i++){
+                // It skips any movies that don't include a poster
                 if(json.results[i].poster_path === null){
                     continue;
                 }else{
